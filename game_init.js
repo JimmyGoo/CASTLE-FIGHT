@@ -1,3 +1,5 @@
+var is_dragging;
+var before_x;
 function game_init(){
 
 	createCanvas();
@@ -17,8 +19,14 @@ function game_init(){
 	ai_castle.init();
 
 	AI.ai_start = AI_start;
-
+	
+	is_dragging = false;
 	//move the map
+	document.onmousedown = function(){
+		is_dragging = true;
+		before_x = event.clientX;
+	}
+
 	document.onmousemove = function(){
 		if(has_game_started){
 			if(event.clientX <= 5){
@@ -52,9 +60,17 @@ function game_init(){
 			else if(event.clientX > 5 && event.clientX < window.innerWidth - 5){
 				clearInterval(background.bg_animate);
 				background.is_bg_moving = false;
+				if(is_dragging){
+					background.left_bg += event.clientX - before_x;
+					before_x = event.clientX;
+				}
 			}
 		}
 	}
+
+	document.onmouseup =function(){
+		is_dragging = false;
+	}	
 
 }
 
